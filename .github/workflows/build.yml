@@ -1,0 +1,21 @@
+name: Build EXE
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [ main ]
+
+jobs:
+  build:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: pip install customtkinter pywinstyles darkdetect packaging pyinstaller
+      - run: pyinstaller --noconfirm --onefile --windowed --collect-all customtkinter --name "SendLove" new.py
+      - uses: actions/upload-artifact@v4
+        with:
+          name: SendLove-EXE
+          path: dist/SendLove.exe
